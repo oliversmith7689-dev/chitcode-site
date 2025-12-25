@@ -5,7 +5,7 @@ const Hero: React.FC = () => {
   const TG_LINK = "https://t.me/chitcod_ru";
 
   return (
-    <section className="relative pt-16 pb-40 px-6 overflow-visible">
+    <section className="relative pt-10 md:pt-16 pb-32 md:pb-40 px-6 overflow-visible">
       {/* Ассоциативная абстракция — «Алгоритмическое ядро» */}
       <div className="absolute right-[2%] top-[-10%] md:top-[-5%] w-[300px] md:w-[600px] h-auto pointer-events-none z-0 opacity-60 animate-float-slow hidden lg:block">
         <svg viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full drop-shadow-[0_0_80px_rgba(226,255,102,0.15)]">
@@ -60,40 +60,40 @@ const Hero: React.FC = () => {
 
       <div className="max-w-7xl mx-auto relative z-10">
         <div className="max-w-full">
-          <h1 className="text-6xl md:text-[100px] font-bold text-white mb-16 leading-[0.9] tracking-tighter uppercase relative">
-            Чит-код уже <br/> существует, и он <br/> 
-            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-8">
+          <h1 className="text-4xl sm:text-6xl md:text-[100px] font-bold text-white mb-10 md:mb-16 leading-[1] md:leading-[0.9] tracking-tighter uppercase relative">
+            Чит-код уже <br className="hidden sm:block" /> существует, <br className="hidden sm:block" /> и он 
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-8 mt-2 md:mt-0">
               <span>прямо перед тобой</span>
               
               {/* Увеличенная плашка "Для Telegram" справа */}
-              <div className="inline-flex items-center gap-4 px-8 py-4 bg-white/10 backdrop-blur-2xl border border-white/20 rounded-full animate-in fade-in slide-in-from-right-8 duration-1000 hover:bg-white/15 transition-colors cursor-default group shrink-0 self-start lg:self-center shadow-[0_20px_50px_rgba(0,0,0,0.2)]">
-                <div className="w-8 h-8 flex items-center justify-center bg-white rounded-full shadow-[0_0_20px_rgba(255,255,255,0.4)] group-hover:scale-110 transition-transform">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <div className="inline-flex items-center gap-3 md:gap-4 px-5 py-3 md:px-8 md:py-4 bg-white/10 backdrop-blur-2xl border border-white/20 rounded-full animate-in fade-in slide-in-from-right-8 duration-1000 hover:bg-white/15 transition-colors cursor-default group shrink-0 self-start lg:self-center shadow-[0_20px_50px_rgba(0,0,0,0.2)]">
+                <div className="w-6 h-6 md:w-8 md:h-8 flex items-center justify-center bg-white rounded-full shadow-[0_0_20px_rgba(255,255,255,0.4)] group-hover:scale-110 transition-transform">
+                    <svg width="14" height="14" md:width="18" md:height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" fill="white"/>
                         <path d="M16.96 8.39L6.5 12.63C6.06 12.82 6.06 13.08 6.42 13.19L9.12 14.03L15.34 10.12C15.63 9.92 15.9 10.03 15.67 10.23L10.63 14.77V14.78L10.62 14.77L10.45 17.27C10.7 17.27 10.81 17.15 10.94 17.02L12.16 15.84L14.7 17.72C15.17 17.99 15.5 17.85 15.62 17.29L17.28 9.42C17.46 8.73 17.02 8.42 16.96 8.39V8.39Z" fill="#8B4DFF"/>
                     </svg>
                 </div>
                 <div className="flex flex-col">
-                  <span className="text-[12px] md:text-[14px] font-black text-white uppercase tracking-[0.3em] leading-none mb-1">Для Telegram</span>
-                  <div className="flex items-center gap-2">
-                    <span className="w-2 h-2 bg-brand-acid rounded-full animate-pulse shadow-[0_0_10px_#E2FF66]"></span>
-                    <span className="text-[8px] font-bold text-white/50 uppercase tracking-widest">Живой алгоритм</span>
+                  <span className="text-[10px] md:text-[14px] font-black text-white uppercase tracking-[0.2em] md:tracking-[0.3em] leading-none mb-1">Для Telegram</span>
+                  <div className="flex items-center gap-1.5 md:gap-2">
+                    <span className="w-1.5 h-1.5 md:w-2 md:h-2 bg-brand-acid rounded-full animate-pulse shadow-[0_0_10px_#E2FF66]"></span>
+                    <span className="text-[7px] md:text-[8px] font-bold text-white/50 uppercase tracking-widest">Живой алгоритм</span>
                   </div>
                 </div>
               </div>
             </div>
           </h1>
           
-          <div className="flex flex-col sm:flex-row gap-8 items-start relative z-10">
+          <div className="flex flex-col sm:flex-row gap-6 md:gap-8 items-start relative z-10">
             <a 
                 href={TG_LINK}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-12 py-5 bg-transparent border-2 border-white text-white text-base font-bold rounded-full hover:bg-white hover:text-black transition-all uppercase tracking-widest active:scale-95 shrink-0 shadow-lg shadow-black/10"
+                className="w-full sm:w-auto text-center px-10 md:px-12 py-4 md:py-5 bg-transparent border-2 border-white text-white text-sm md:text-base font-bold rounded-full hover:bg-white hover:text-black transition-all uppercase tracking-widest active:scale-95 shrink-0 shadow-lg shadow-black/10"
             >
               Активировать
             </a>
-            <p className="text-white/70 text-xl max-w-md leading-tight font-medium">
+            <p className="text-white/70 text-base md:text-xl max-w-md leading-tight font-medium">
               Алгоритмическое органическое продвижение в Telegram. Полная невидимость для аналитических систем.
             </p>
           </div>

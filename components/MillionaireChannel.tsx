@@ -5,26 +5,26 @@ const MillionaireChannel: React.FC = () => {
   const TG_LINK = "https://t.me/chitcod_ru";
 
   return (
-    <div className="max-w-7xl mx-auto">
-      <div className="bg-[#0A0A0A] rounded-[60px] p-10 md:p-24 overflow-hidden relative border border-white/5 shadow-[0_50px_100px_-20px_rgba(0,0,0,0.5)] group">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6">
+      <div className="bg-[#0A0A0A] rounded-[40px] md:rounded-[60px] p-8 md:p-24 overflow-hidden relative border border-white/5 shadow-[0_50px_100px_-20px_rgba(0,0,0,0.5)] group">
         {/* Abstract background graphics */}
         <div className="absolute top-0 right-0 w-1/2 h-full bg-[#DFFF5E]/5 blur-[120px] rounded-full pointer-events-none group-hover:bg-[#DFFF5E]/10 transition-all duration-700"></div>
         
         <div className="relative z-10">
-          <div className="inline-flex items-center gap-2 px-5 py-2 border border-[#DFFF5E]/30 rounded-full mb-12">
-            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-[#DFFF5E]">Флагманский сервис</span>
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 md:px-5 md:py-2 border border-[#DFFF5E]/30 rounded-full mb-8 md:mb-12">
+            <span className="text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.3em] text-[#DFFF5E]">Флагманский сервис</span>
           </div>
 
-          <div className="grid lg:grid-cols-5 gap-16 items-start">
+          <div className="grid lg:grid-cols-5 gap-10 md:gap-16 items-start">
             <div className="lg:col-span-3">
-              <h2 className="text-5xl md:text-[5.5rem] font-bold text-white mb-10 leading-[0.85] tracking-tighter uppercase">
-                Канал-миллионник <br/> 
+              <h2 className="text-3xl sm:text-5xl md:text-[5.5rem] font-bold text-white mb-6 md:mb-10 leading-[1.1] md:leading-[0.85] tracking-tighter uppercase">
+                Канал-миллионник <br className="hidden sm:block" /> 
                 <span className="text-[#DFFF5E] inline-block transition-all duration-300 hover:scale-105 hover:drop-shadow-[0_0_15px_rgba(223,255,94,0.4)] cursor-default glitch-hover">
                   за 1 000 000 ₽
                 </span>
               </h2>
               
-              <p className="text-xl text-white/50 font-medium leading-snug mb-16 max-w-2xl">
+              <p className="text-base md:text-xl text-white/50 font-medium leading-tight md:leading-snug mb-10 md:mb-16 max-w-2xl">
                 Создаем медиа-актив, который работает на вас. Мы берем на себя полное построение инфраструктуры канала: от разработки стратегии и нейминга до залива первой сотни тысяч аудитории по нашим уникальным алгоритмам «лесенки».
               </p>
 
@@ -32,42 +32,42 @@ const MillionaireChannel: React.FC = () => {
                 href={TG_LINK}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex px-12 py-6 bg-[#DFFF5E] text-black rounded-full font-black text-sm uppercase tracking-widest shadow-[0_20px_40px_rgba(223,255,94,0.2)] hover:shadow-[0_25px_60px_rgba(223,255,94,0.4)] hover:scale-[1.02] transition-all"
+                className="inline-flex w-full sm:w-auto justify-center px-10 md:px-12 py-5 md:py-6 bg-[#DFFF5E] text-black rounded-full font-black text-xs md:text-sm uppercase tracking-widest shadow-[0_20px_40px_rgba(223,255,94,0.2)] hover:shadow-[0_25px_60px_rgba(223,255,94,0.4)] hover:scale-[1.02] transition-all"
               >
-                Забронировать стратегию в ЛС
+                Забронировать стратегию
               </a>
             </div>
 
-            <div className="lg:col-span-2 space-y-12 lg:pt-8">
-              <div className="flex gap-6 group/item">
-                <div className="text-[#DFFF5E] font-mono text-xs font-bold pt-1 opacity-40 group-hover/item:opacity-100 transition-opacity">01</div>
+            <div className="lg:col-span-2 space-y-8 md:space-y-12 lg:pt-8">
+              <div className="flex gap-4 md:gap-6 group/item">
+                <div className="text-[#DFFF5E] font-mono text-[10px] md:text-xs font-bold pt-1 opacity-40 group-hover/item:opacity-100 transition-opacity">01</div>
                 <div>
-                  <h4 className="text-white font-bold text-xl uppercase tracking-tight mb-2">Твердый актив</h4>
-                  <p className="text-white/40 text-sm leading-relaxed">Вы получаете не просто цифры, а готовый бизнес с идеальной историей в TGStat и Telemetr.</p>
+                  <h4 className="text-white font-bold text-lg md:text-xl uppercase tracking-tight mb-1 md:mb-2">Твердый актив</h4>
+                  <p className="text-white/40 text-xs md:text-sm leading-relaxed">Вы получаете не просто цифры, а готовый бизнес с идеальной историей в TGStat и Telemetr.</p>
                 </div>
               </div>
 
-              <div className="flex gap-6 group/item">
-                <div className="text-[#DFFF5E] font-mono text-xs font-bold pt-1 opacity-40 group-hover/item:opacity-100 transition-opacity">02</div>
+              <div className="flex gap-4 md:gap-6 group/item">
+                <div className="text-[#DFFF5E] font-mono text-[10px] md:text-xs font-bold pt-1 opacity-40 group-hover/item:opacity-100 transition-opacity">02</div>
                 <div>
-                  <h4 className="text-white font-bold text-xl uppercase tracking-tight mb-2">Алгоритмическая органика</h4>
-                  <p className="text-white/40 text-sm leading-relaxed">Подписчики и охваты распределяются по кривой естественного роста. Никаких меток.</p>
+                  <h4 className="text-white font-bold text-lg md:text-xl uppercase tracking-tight mb-1 md:mb-2">Алгоритмическая органика</h4>
+                  <p className="text-white/40 text-xs md:text-sm leading-relaxed">Подписчики и охваты распределяются по кривой естественного роста. Никаких меток.</p>
                 </div>
               </div>
 
-              <div className="flex gap-6 group/item">
-                <div className="text-[#DFFF5E] font-mono text-xs font-bold pt-1 opacity-40 group-hover/item:opacity-100 transition-opacity">03</div>
+              <div className="flex gap-4 md:gap-6 group/item">
+                <div className="text-[#DFFF5E] font-mono text-[10px] md:text-xs font-bold pt-1 opacity-40 group-hover/item:opacity-100 transition-opacity">03</div>
                 <div>
-                  <h4 className="text-white font-bold text-xl uppercase tracking-tight mb-2">Монетизация под ключ</h4>
-                  <p className="text-white/40 text-sm leading-relaxed italic font-medium">К моменту завершения раскрутки канал будет готов к продаже рекламы в 50 000- 100 000 руб. за 1 рекламный пост</p>
+                  <h4 className="text-white font-bold text-lg md:text-xl uppercase tracking-tight mb-1 md:mb-2">Монетизация под ключ</h4>
+                  <p className="text-white/40 text-xs md:text-sm leading-relaxed italic font-medium">К моменту завершения раскрутки канал будет готов к продаже рекламы от 50к до 100к руб. за пост.</p>
                 </div>
               </div>
 
-              <div className="flex gap-6 group/item">
-                <div className="text-[#DFFF5E] font-mono text-xs font-bold pt-1 opacity-40 group-hover/item:opacity-100 transition-opacity">04</div>
+              <div className="flex gap-4 md:gap-6 group/item">
+                <div className="text-[#DFFF5E] font-mono text-[10px] md:text-xs font-bold pt-1 opacity-40 group-hover/item:opacity-100 transition-opacity">04</div>
                 <div>
-                  <h4 className="text-white font-bold text-xl uppercase tracking-tight mb-2">Полный Stealth-режим</h4>
-                  <p className="text-white/40 text-sm leading-relaxed">Мы соблюдаем строгий NDA. О том, как был создан ваш миллионник, будет знать только менеджер.</p>
+                  <h4 className="text-white font-bold text-lg md:text-xl uppercase tracking-tight mb-1 md:mb-2">Полный Stealth-режим</h4>
+                  <p className="text-white/40 text-xs md:text-sm leading-relaxed">Мы соблюдаем строгий NDA. О том, как был создан ваш миллионник, будет знать только менеджер.</p>
                 </div>
               </div>
             </div>
