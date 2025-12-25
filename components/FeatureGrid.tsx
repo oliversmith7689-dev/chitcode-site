@@ -71,7 +71,7 @@ const FeatureGrid: React.FC<FeatureGridProps> = ({ role }) => {
     {
       title: 'Мягкий залив',
       desc: 'Прирост подписчиков под наблюдением куратора 24/7.',
-      result: 'Limit: 5k/day',
+      result: 'Limit: 500k/day',
       icon: (
         <div className="relative w-12 h-10 flex items-center justify-center">
             <svg width="40" height="20" viewBox="0 0 40 20" fill="none" className="text-brand-purple/40">
