@@ -12,7 +12,7 @@ const MillionaireChannel: React.FC = () => {
         
         <div className="relative z-10">
           <div className="inline-flex items-center gap-2 px-5 py-2 border border-[#DFFF5E]/30 rounded-full mb-12">
-            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-[#DFFF5E]">Flagship Service</span>
+            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-[#DFFF5E]">Флагманский сервис</span>
           </div>
 
           <div className="grid lg:grid-cols-5 gap-16 items-start">

@@ -170,7 +170,7 @@ const ComparisonSection: React.FC<ComparisonSectionProps> = ({ role }) => {
             <div className="flex justify-between items-start mb-14">
               <h3 className="text-2xl font-bold uppercase tracking-tight text-brand-acid">С чит-кодом</h3>
               <div className="text-right">
-                  <p className="text-[8px] text-white/40 font-bold uppercase tracking-widest leading-none">Retention</p>
+                  <p className="text-[8px] text-white/40 font-bold uppercase tracking-widest leading-none">Удержание</p>
                   <p className="text-brand-acid font-black text-xl">98%</p>
               </div>
             </div>

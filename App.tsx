@@ -57,7 +57,7 @@ const App: React.FC = () => {
     <div className="min-h-screen bg-white selection:bg-brand-acid selection:text-black overflow-x-hidden">
       {/* Modals */}
       {activeModal === 'privacy' && (
-        <Modal title="Privacy Policy" onClose={() => setActiveModal(null)}>
+        <Modal title="Политика конфиденциальности" onClose={() => setActiveModal(null)}>
           <p className="font-bold text-black uppercase tracking-widest text-[10px] mb-4">CHITCOD ANONYMITY PROTOCOL</p>
           <p>Сервис ЧИТКОД гарантирует <strong>полную анонимность</strong> клиентов и защиту данных о продвигаемых каналах. Мы работаем в режиме строгого NDA (Non-Disclosure Agreement).</p>
           <p>Мы не передаем данные третьим лицам, рекламным сетям или государственным структурам. Информация о ваших кампаниях не индексируется внешними сервисами аналитики.</p>
@@ -71,7 +71,7 @@ const App: React.FC = () => {
       )}
 
       {activeModal === 'terms' && (
-        <Modal title="Terms of Service" onClose={() => setActiveModal(null)}>
+        <Modal title="Условия использования" onClose={() => setActiveModal(null)}>
           <p className="font-bold text-black uppercase tracking-widest text-[10px] mb-4">Алгоритмический регламент</p>
           <p>1. <strong>Механика «Лесенки»:</strong> Сервис осуществляет распределение активности (просмотры, реакции) по математической кривой затухания в течение 72 часов для имитации органического интереса.</p>
           <p>2. <strong>Гарантии безопасности:</strong> Мы гарантируем технологическое отсутствие красных меток («бот-алертов») в системах TGStat и Telemetr при соблюдении рекомендаций куратора.</p>
@@ -84,14 +84,6 @@ const App: React.FC = () => {
           </div>
         </Modal>
       )}
-
-      {/* Security Status Fixed Indicator */}
-      <div className="fixed bottom-6 right-6 z-[100] flex items-center gap-3 bg-black/90 backdrop-blur px-4 py-2 rounded-full border border-white/10 shadow-2xl">
-        <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse shadow-[0_0_8px_#22c55e]"></div>
-        <span className="text-[10px] font-black text-white uppercase tracking-widest">
-          Status: Undetected by TGStat / Telemetr
-        </span>
-      </div>
 
       <div className="bg-brand-purple min-h-[70vh] relative overflow-hidden">
         <div className="hero-curve"></div>
@@ -145,13 +137,13 @@ const App: React.FC = () => {
               onClick={() => setActiveModal('privacy')}
               className="hover:text-black transition-colors uppercase"
             >
-              Privacy
+              Приватность
             </button>
             <button 
               onClick={() => setActiveModal('terms')}
               className="hover:text-black transition-colors uppercase"
             >
-              Terms
+              Условия
             </button>
             <a 
               href={SUPPORT_LINK} 
@@ -159,7 +151,7 @@ const App: React.FC = () => {
               rel="noopener noreferrer" 
               className="hover:text-black transition-colors uppercase"
             >
-              Support
+              Поддержка
             </a>
           </div>
         </div>

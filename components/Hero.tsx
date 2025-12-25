@@ -77,7 +77,7 @@ const Hero: React.FC = () => {
                   <span className="text-[12px] md:text-[14px] font-black text-white uppercase tracking-[0.3em] leading-none mb-1">Для Telegram</span>
                   <div className="flex items-center gap-2">
                     <span className="w-2 h-2 bg-brand-acid rounded-full animate-pulse shadow-[0_0_10px_#E2FF66]"></span>
-                    <span className="text-[8px] font-bold text-white/50 uppercase tracking-widest">Live Algorithm</span>
+                    <span className="text-[8px] font-bold text-white/50 uppercase tracking-widest">Живой алгоритм</span>
                   </div>
                 </div>
               </div>
