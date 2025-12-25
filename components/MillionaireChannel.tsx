@@ -17,14 +17,14 @@ const MillionaireChannel: React.FC = () => {
 
           <div className="grid lg:grid-cols-5 gap-10 md:gap-16 items-start">
             <div className="lg:col-span-3">
-              <h2 className="text-3xl sm:text-5xl md:text-[5.5rem] font-bold text-white mb-6 md:mb-10 leading-[1.1] md:leading-[0.85] tracking-tighter uppercase">
-                Канал-миллионник <br className="hidden sm:block" /> 
+              <h2 className="text-3xl sm:text-5xl md:text-[5.5rem] font-bold text-white mb-6 md:mb-10 leading-[1.2] md:leading-[0.85] tracking-tighter uppercase">
+                <span>Канал-миллионник</span> <br /> 
                 <span className="text-[#DFFF5E] inline-block transition-all duration-300 hover:scale-105 hover:drop-shadow-[0_0_15px_rgba(223,255,94,0.4)] cursor-default glitch-hover">
                   за 1 000 000 ₽
                 </span>
               </h2>
               
-              <p className="text-base md:text-xl text-white/50 font-medium leading-tight md:leading-snug mb-10 md:mb-16 max-w-2xl">
+              <p className="text-base md:text-xl text-white/50 font-medium leading-normal md:leading-snug mb-10 md:mb-16 max-w-2xl">
                 Создаем медиа-актив, который работает на вас. Мы берем на себя полное построение инфраструктуры канала: от разработки стратегии и нейминга до залива первой сотни тысяч аудитории по нашим уникальным алгоритмам «лесенки».
               </p>
 
