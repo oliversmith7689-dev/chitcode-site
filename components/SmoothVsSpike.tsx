@@ -56,7 +56,7 @@ const Card: React.FC<{ tone: 'moss' | 'rose'; label: string; tag: string; captio
   );
 
 const SmoothVsSpike: React.FC = () => {
-  const { ref, inView } = useInView<HTMLDivElement>(0.25);
+  const { ref, inView } = useInView<HTMLDivElement>();
   return (
     <div className="container-x">
       <div ref={ref} className="card p-6 sm:p-10 md:p-14">

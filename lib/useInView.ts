@@ -1,7 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
 
-/** Один раз становится true, когда элемент попал во вьюпорт. */
-export function useInView<T extends HTMLElement>(threshold = 0.3) {
+/**
+ * Один раз становится true, когда элемент заходит во вьюпорт.
+ * Порог по площади не используем: высокие блоки могут не набрать процент
+ * на невысоком экране и анимация не запустится вообще.
+ */
+export function useInView<T extends HTMLElement>(rootMargin = '0px 0px -120px 0px') {
   const ref = useRef<T>(null);
   const [inView, setInView] = useState(false);
   useEffect(() => {
@@ -10,9 +14,9 @@ export function useInView<T extends HTMLElement>(threshold = 0.3) {
     if (!('IntersectionObserver' in window)) { setInView(true); return; }
     const io = new IntersectionObserver(([e]) => {
       if (e.isIntersecting) { setInView(true); io.disconnect(); }
-    }, { threshold });
+    }, { threshold: 0, rootMargin });
     io.observe(el);
     return () => io.disconnect();
-  }, [threshold]);
+  }, [rootMargin]);
   return { ref, inView };
 }
