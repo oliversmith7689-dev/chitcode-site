@@ -1,202 +1,96 @@
-
 import React, { useEffect, useRef, useState } from 'react';
-import * as d3 from 'd3';
-import { UserRole } from '../App';
+import { useInView } from '../lib/useInView';
+import { UserRole } from '../lib/constants';
 
-interface ComparisonSectionProps {
-  role: UserRole;
-}
-
-// Global flag to ensure animation only happens once per page session
-let hasGlobalAnimated = false;
-
-const DigitalRainLocal: React.FC<{ side: 'left' | 'right' }> = ({ side }) => {
-  const [streams, setStreams] = useState<string[]>([]);
-
+const AnimatedNumber: React.FC<{ value: number; on: boolean; duration?: number }> = ({ value, on, duration = 1400 }) => {
+  const [v, setV] = useState(0);
+  const started = useRef(false);
   useEffect(() => {
-    const chars = "01ABCDEF";
-    const generateStream = () => {
-      let stream = "";
-      for (let i = 0; i < 30; i++) {
-        stream += chars.charAt(Math.floor(Math.random() * chars.length)) + "\n";
-      }
-      return stream;
+    if (!on || started.current) return;
+    started.current = true;
+    const ease = (t: number) => 1 - Math.pow(1 - t, 4);
+    let t0: number | null = null;
+    const step = (ts: number) => {
+      if (t0 === null) t0 = ts;
+      const p = Math.min((ts - t0) / duration, 1);
+      setV(Math.round(ease(p) * value));
+      if (p < 1) requestAnimationFrame(step);
     };
-    setStreams(Array.from({ length: 4 }, () => generateStream()));
-  }, []);
-
-  return (
-    <div className={`absolute top-0 bottom-0 ${side === 'left' ? '-left-20' : '-right-20'} w-32 pointer-events-none opacity-[0.06] overflow-hidden hidden xl:block select-none`}>
-      <div className="flex justify-between h-full">
-        {streams.map((content, i) => (
-          <div 
-            key={i} 
-            className="text-[11px] font-mono whitespace-pre leading-[0.8] animate-matrix-fall text-brand-purple"
-            style={{ 
-              animationDelay: `${i * 2}s`,
-              animationDuration: `${12 + Math.random() * 8}s`
-            }}
-          >
-            {content}
-          </div>
-        ))}
-      </div>
-    </div>
-  );
+    requestAnimationFrame(step);
+  }, [on, value, duration]);
+  return <>{v.toLocaleString('ru-RU')}</>;
 };
 
-const AnimatedNumber: React.FC<{ value: number, duration?: number }> = ({ value, duration = 1500 }) => {
-  const [displayValue, setDisplayValue] = useState(hasGlobalAnimated ? value : 0);
-  const nodeRef = useRef<HTMLSpanElement>(null);
-  const animationStarted = useRef(hasGlobalAnimated);
-
-  useEffect(() => {
-    if (animationStarted.current) return;
-
-    const easeOutQuart = (t: number) => 1 - (--t) * t * t * t;
-
-    let startTimestamp: number | null = null;
-    const step = (timestamp: number) => {
-      if (!startTimestamp) startTimestamp = timestamp;
-      const elapsed = timestamp - startTimestamp;
-      const progress = Math.min(elapsed / duration, 1);
-      
-      const easedProgress = easeOutQuart(progress);
-      const currentVal = Math.floor(easedProgress * value);
-      
-      setDisplayValue(currentVal);
-
-      if (progress < 1) {
-        window.requestAnimationFrame(step);
-      } else {
-        setDisplayValue(value);
-        hasGlobalAnimated = true;
-      }
-    };
-    
-    const observer = new IntersectionObserver((entries) => {
-      if (entries[0].isIntersecting && !animationStarted.current) {
-        animationStarted.current = true;
-        window.requestAnimationFrame(step);
-        observer.disconnect();
-      }
-    }, { threshold: 0.1 });
-
-    if (nodeRef.current) observer.observe(nodeRef.current);
-    
-    return () => observer.disconnect();
-  }, [value, duration]);
-
-  return <span ref={nodeRef}>{displayValue.toLocaleString()}</span>;
-};
-
-const ComparisonSection: React.FC<ComparisonSectionProps> = ({ role }) => {
-  const chartRef2 = useRef<SVGSVGElement>(null);
-
-  useEffect(() => {
-    if (chartRef2.current) {
-      const svg = d3.select(chartRef2.current);
-      svg.selectAll('*').remove();
-      const width = 350, height = 80;
-      const data = [5, 10, 15, 20, 30, 45, 60, 80, 100, 110, 110];
-      const x = d3.scaleBand().domain(data.map((_, i) => i.toString())).range([0, width]).padding(0.2);
-      const y = d3.scaleLinear().domain([0, 120]).range([height, 0]);
-      
-      svg.selectAll('rect')
-        .data(data)
-        .enter()
-        .append('rect')
-        .attr('x', (_, i) => x(i.toString()) || 0)
-        .attr('y', d => y(d))
-        .attr('width', x.bandwidth())
-        .attr('height', d => height - y(d))
-        .attr('fill', '#E2FF66')
-        .attr('rx', 2)
-        .attr('opacity', (_, i) => 0.3 + (i / data.length) * 0.7);
-    }
-  }, []);
-
-  const StatRow = ({ label, value, percentage, isAcid }: { label: string, value: number, percentage: string, isAcid?: boolean }) => (
-    <div className="mb-8 last:mb-0">
-      <p className={`${isAcid ? 'text-white/40' : 'text-black/30'} text-[10px] font-bold uppercase tracking-widest mb-1`}>
-        {label}
-      </p>
-      <div className="flex items-center gap-4">
-        <p className={`text-4xl font-bold tracking-tight min-w-[120px] ${isAcid ? 'text-white' : 'text-black'}`}>
-          <AnimatedNumber value={value} />
-        </p>
-        <div className="flex-1 flex items-center gap-4">
-          <div className={`flex-1 h-[6px] rounded-full ${isAcid ? 'bg-white/10' : 'bg-black/5'} relative`}>
-            <div 
-              className={`absolute left-0 top-0 h-full rounded-full transition-all duration-1000 ease-out ${isAcid ? 'bg-brand-acid shadow-[0_0_10px_rgba(226,255,102,0.4)]' : 'bg-gray-400'}`} 
-              style={{ width: percentage }}
-            ></div>
-          </div>
-          <span className={`text-[10px] font-bold w-8 text-right ${isAcid ? 'text-white/30' : 'text-black/20'}`}>{percentage}</span>
-        </div>
+const Row: React.FC<{ label: string; value: number; pct: number; dark?: boolean; on: boolean }> = ({ label, value, pct, dark, on }) => (
+  <div>
+    <div className={`text-sm mb-1.5 ${dark ? 'text-white/55' : 'text-brand-ink/50'}`}>{label}</div>
+    <div className="flex items-center gap-4">
+      <div className={`text-3xl md:text-4xl font-semibold tabular-nums tracking-tight min-w-[110px] ${dark ? 'text-white' : 'text-brand-ink'}`}>
+        <AnimatedNumber value={value} on={on} />
       </div>
+      <div className={`flex-1 h-1.5 rounded-full overflow-hidden ${dark ? 'bg-white/10' : 'bg-brand-ink/[.06]'}`}>
+        <div
+          className={`h-full rounded-full ${dark ? 'bg-brand-acid' : 'bg-brand-ink/25'}`}
+          style={{ width: on ? `${pct}%` : '0%', transition: 'width 1.2s cubic-bezier(.2,.8,.2,1) .1s' }}
+        />
+      </div>
+      <span className={`text-xs tabular-nums w-9 text-right ${dark ? 'text-white/40' : 'text-brand-ink/35'}`}>{pct}%</span>
     </div>
-  );
+  </div>
+);
 
+const GROWTH = [5, 10, 15, 20, 30, 45, 60, 80, 100, 110, 110];
+
+const ComparisonSection: React.FC<{ role: UserRole }> = ({ role }) => {
+  const { ref, inView } = useInView<HTMLDivElement>(0.25);
   return (
-    <div className="py-20 relative">
-      {/* Aesthetic Matrix Decoration Arrows point here */}
-      <DigitalRainLocal side="left" />
-      <DigitalRainLocal side="right" />
+    <div ref={ref} className="container-x">
+      <h2 className="text-4xl md:text-5xl text-center mb-10 md:mb-14">
+        {role === 'agency' ? 'Результат для клиента за 24 часа' : 'Результат за 24 часа'}
+      </h2>
 
-      <div className="text-center mb-20 relative z-10">
-        <h2 className="text-5xl md:text-6xl font-bold uppercase tracking-tighter text-black">Результат за 24 часа</h2>
-      </div>
-
-      <div className="grid md:grid-cols-2 gap-6 max-w-6xl mx-auto items-stretch relative z-10">
-        {/* Left Card: Ordinary */}
-        <div className="bg-white p-12 rounded-[48px] border border-gray-100 shadow-sm flex flex-col justify-between">
+      <div className="grid md:grid-cols-2 gap-4 md:gap-6 max-w-6xl mx-auto">
+        <div className="card p-7 sm:p-10 md:p-12 flex flex-col justify-between">
           <div>
-            <h3 className="text-[12px] font-bold mb-14 uppercase tracking-[0.2em] text-black/30">Обычный путь</h3>
-            <div className="space-y-10">
-              <StatRow label="Подписчики" value={3850} percentage="40%" />
-              <StatRow label="Просмотры" value={1150} percentage="25%" />
-              <StatRow label="Реакции" value={12} percentage="10%" />
+            <div className="text-sm text-brand-ink/40 mb-10">Обычный путь</div>
+            <div className="space-y-8">
+              <Row label="Подписчики" value={3850} pct={40} on={inView} />
+              <Row label="Просмотры" value={1150} pct={25} on={inView} />
+              <Row label="Реакции" value={12} pct={10} on={inView} />
             </div>
           </div>
-          <div className="mt-20 h-20 border-t border-gray-50 flex items-center opacity-10">
-             <div className="w-full h-px bg-black/20"></div>
+          <div className="mt-12 h-[72px] flex items-end gap-1.5 opacity-30" aria-hidden="true">
+            {GROWTH.map((v, i) => <div key={i} className="flex-1 rounded-sm bg-brand-ink/40" style={{ height: `${(v / 110) * 30 + 6}%` }} />)}
           </div>
         </div>
 
-        {/* Right Card: Cheat-code */}
-        <div className="bg-brand-purple p-12 rounded-[48px] shadow-[0_40px_100px_-20px_rgba(139,77,255,0.3)] flex flex-col justify-between relative overflow-hidden border border-white/5">
-          <div>
-            <div className="flex justify-between items-start mb-14">
-              <h3 className="text-2xl font-bold uppercase tracking-tight text-brand-acid">С чит-кодом</h3>
+        <div className="bg-brand-purple rounded-card shadow-purple p-7 sm:p-10 md:p-12 flex flex-col justify-between relative overflow-hidden">
+          <div className="absolute -top-24 -right-24 w-72 h-72 bg-brand-acid/20 blur-[90px] rounded-full pointer-events-none" />
+          <div className="relative">
+            <div className="flex items-start justify-between mb-10">
+              <div className="text-2xl font-semibold text-brand-acid">С чит-кодом</div>
               <div className="text-right">
-                  <p className="text-[8px] text-white/40 font-bold uppercase tracking-widest leading-none">Удержание</p>
-                  <p className="text-brand-acid font-black text-xl">98%</p>
+                <div className="text-xs text-white/50">Удержание</div>
+                <div className="text-brand-acid text-xl font-semibold">98%</div>
               </div>
             </div>
-            
-            <div className="space-y-10">
-              <StatRow label="Подписчики" value={12400} percentage="98%" isAcid />
-              <StatRow label="Просмотры" value={4600} percentage="95%" isAcid />
-              <StatRow label="Реакции" value={94} percentage="92%" isAcid />
+            <div className="space-y-8">
+              <Row label="Подписчики" value={12400} pct={98} dark on={inView} />
+              <Row label="Просмотры" value={4600} pct={95} dark on={inView} />
+              <Row label="Реакции" value={94} pct={92} dark on={inView} />
             </div>
           </div>
-          
-          <div className="mt-16 flex items-end justify-center">
-            <svg ref={chartRef2} width="100%" height="80" viewBox="0 0 350 80" preserveAspectRatio="xMidYMax meet"></svg>
+          <div className="relative mt-12 h-[72px] flex items-end gap-1.5" aria-hidden="true">
+            {GROWTH.map((v, i) => (
+              <div key={i} className="flex-1 rounded-sm bg-brand-acid" style={{
+                height: inView ? `${(v / 110) * 100}%` : '4%',
+                opacity: 0.35 + (i / GROWTH.length) * 0.65,
+                transition: `height .8s cubic-bezier(.2,.8,.2,1) ${i * 50}ms`,
+              }} />
+            ))}
           </div>
         </div>
       </div>
-      
-      <style>{`
-        @keyframes matrix-fall {
-          0% { transform: translateY(-100%); }
-          100% { transform: translateY(100%); }
-        }
-        .animate-matrix-fall {
-          animation: matrix-fall linear infinite;
-        }
-      `}</style>
     </div>
   );
 };
