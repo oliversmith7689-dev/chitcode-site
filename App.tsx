@@ -64,7 +64,7 @@ const App: React.FC = () => {
       <Header />
       <Hero />
 
-      <main className="relative -mt-16 md:-mt-24 z-10 space-y-6 md:space-y-8 pb-6 md:pb-8">
+      <main className="relative z-10 pt-6 md:pt-8 space-y-6 md:space-y-8 pb-6 md:pb-8">
         <section id="start" className="scroll-mt-24"><StartEasy role={role} setRole={setRole} /></section>
         <section><SmoothVsSpike /></section>
         <section className="py-10 md:py-16"><ComparisonSection role={role} /></section>

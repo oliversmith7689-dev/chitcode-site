@@ -27,7 +27,7 @@
 }
 
 @layer components {
-  .container-x { @apply max-w-7xl mx-auto px-5 sm:px-8; }
+  .container-x { @apply w-full max-w-7xl 2xl:max-w-[1600px] mx-auto px-5 sm:px-8 2xl:px-12; }
   .btn {
     @apply relative inline-flex items-center justify-center gap-2 rounded-full font-medium select-none overflow-hidden isolate;
     transition: transform .25s cubic-bezier(.2,.8,.2,1), box-shadow .25s cubic-bezier(.2,.8,.2,1), background-color .25s, color .25s;

@@ -9,18 +9,18 @@ const Hero: React.FC = () => (
     <div className="absolute inset-0 -z-10 bg-brand-purple" />
     <div className="absolute inset-0 -z-10 bg-[radial-gradient(120%_80%_at_80%_0%,rgba(139,77,255,.55),transparent_60%),radial-gradient(80%_60%_at_0%_100%,rgba(76,17,145,.7),transparent_60%)]" />
 
-    <div className="container-x relative pt-6 md:pt-10 pb-28 md:pb-40">
+    <div className="container-x relative pt-6 md:pt-10 pb-20 md:pb-28">
       <div className="grid lg:grid-cols-12 gap-8 items-center">
         {/* Текст */}
         <div className="lg:col-span-7 relative z-10">
           <div className="inline-block rounded-[28px] md:rounded-[36px] border border-white/35 px-5 py-5 sm:px-8 sm:py-7 md:px-10 md:py-9 backdrop-blur-[2px] bg-white/[.03] relative max-w-full">
-            <h1 className="text-white text-[34px] leading-[1.04] sm:text-[52px] md:text-[60px] lg:text-[56px] xl:text-[68px] 2xl:text-[76px] tracking-[-0.045em] font-semibold sm:whitespace-nowrap">
+            <h1 className="text-white text-[34px] leading-[1.04] sm:text-[52px] md:text-[60px] lg:text-[58px] xl:text-[72px] 2xl:text-[88px] tracking-[-0.045em] font-semibold sm:whitespace-nowrap">
               Подключи чит-код<br />
               к своему каналу<span className="caret" aria-hidden="true" />
             </h1>
           </div>
 
-          <p className="mt-7 md:mt-9 text-white/75 text-lg md:text-2xl max-w-xl leading-snug">
+          <p className="mt-7 md:mt-9 text-white/75 text-lg md:text-xl 2xl:text-2xl max-w-xl 2xl:max-w-2xl leading-snug">
             Управляемая накрутка поведенческих факторов для Telegram, невидимая аналитическим сервисам.
           </p>
 
@@ -43,7 +43,7 @@ const Hero: React.FC = () => (
 
         {/* Ядро — 3D-логотип */}
         <div className="lg:col-span-5 relative">
-          <Kernel className="h-[300px] sm:h-[380px] lg:h-[560px] xl:h-[620px] -mt-6 lg:mt-0 lg:-mr-10" />
+          <Kernel className="h-[300px] sm:h-[380px] lg:h-[520px] xl:h-[600px] 2xl:h-[680px] -mt-6 lg:mt-0 lg:-mr-16 2xl:-mr-24" />
           <p className="text-center lg:text-right text-white/35 text-xs mt-2 hidden sm:block select-none">Потяни или тапни</p>
         </div>
       </div>

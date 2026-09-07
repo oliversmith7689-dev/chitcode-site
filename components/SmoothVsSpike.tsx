@@ -18,9 +18,11 @@ const Bars: React.FC<{ data: number[]; tone: 'moss' | 'rose'; on: boolean }> = (
       {/* порог подозрения */}
       {tone === 'rose' && (
         <>
-          <line x1="0" x2={W} y1={y(60)} y2={y(60)} stroke="white" strokeOpacity=".55" strokeDasharray="4 6" />
-          <rect x={W / 2 - 62} y={y(60) - 10} width="124" height="20" rx="10" fill="#E03A3A" />
-          <text x={W / 2} y={y(60) + 4} textAnchor="middle" fontSize="11" fill="white" fillOpacity=".9" className="font-mono">порог аномалии</text>
+          <line x1="0" x2={W} y1={y(60)} y2={y(60)} stroke="white" strokeOpacity=".6" strokeDasharray="5 6" />
+          <g transform={`translate(210 ${y(60)})`}>
+            <rect x="-52" y="-23" width="104" height="19" rx="9.5" fill="white" />
+            <text x="0" y="-9.5" textAnchor="middle" fontSize="10" fill="#E03A3A" fontWeight="600">порог аномалии</text>
+          </g>
         </>
       )}
       {data.map((v, i) => (

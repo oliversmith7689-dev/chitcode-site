@@ -49,7 +49,7 @@ const ComparisonSection: React.FC<{ role: UserRole }> = ({ role }) => {
         {role === 'agency' ? 'Результат для клиента за 24 часа' : 'Результат за 24 часа'}
       </h2>
 
-      <div className="grid md:grid-cols-2 gap-4 md:gap-6 max-w-6xl mx-auto">
+      <div className="grid md:grid-cols-2 gap-4 md:gap-6">
         <div className="card p-7 sm:p-10 md:p-12 flex flex-col justify-between">
           <div>
             <div className="text-sm text-brand-ink/40 mb-10">Обычный путь</div>
