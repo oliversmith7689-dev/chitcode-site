@@ -146,7 +146,7 @@ const PILLARS = [
 ];
 
 const StaircaseTech: React.FC = () => {
-  const { ref, inView } = useInView<HTMLDivElement>(0.3);
+  const { ref, inView } = useInView<HTMLDivElement>();
   return (
     <div className="container-x space-y-4 md:space-y-6">
       <div ref={ref} className="rounded-card overflow-hidden bg-[linear-gradient(160deg,#4C1191_0%,#7E22CE_60%,#8B4DFF_100%)] shadow-purple text-white p-6 sm:p-10 md:p-14">
