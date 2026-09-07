@@ -17,7 +17,7 @@ const MillionaireChannel: React.FC = () => (
           <div className="inline-flex items-center rounded-full border border-brand-acid/40 text-brand-acid text-sm px-4 py-1.5 mb-8">Флагман 100K+</div>
           <h2 className="text-4xl sm:text-5xl md:text-7xl leading-[0.95]">
             Канал-миллионник<br />
-            <span className="text-brand-acid">за 1 000 000 ₽</span>
+            <span className="text-brand-acid price-glitch">за 1 000 000 ₽</span>
           </h2>
           <p className="mt-7 text-white/60 text-lg leading-relaxed max-w-xl">
             Собираем медиа-актив под ключ: стратегия, нейминг, инфраструктура и залив первой сотни тысяч аудитории по лесенке.

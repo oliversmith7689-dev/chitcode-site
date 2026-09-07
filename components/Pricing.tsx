@@ -39,7 +39,7 @@ const Pricing: React.FC<{ role: UserRole }> = ({ role }) => (
               ))}
             </ul>
             <a href={t.flag ? '#business' : TG_LINK} target={t.flag ? undefined : '_blank'} rel="noopener noreferrer"
-              className={`btn btn-md mt-7 w-full ${t.flag ? 'btn-acid' : 'bg-white text-brand-ink hover:bg-brand-purple hover:text-white'}`}>
+              className={`btn btn-md mt-7 w-full ${t.flag ? 'btn-acid' : 'btn-soft'}`}>
               {t.flag ? 'Смотреть флагман' : 'Рассчитать'}
             </a>
           </div>

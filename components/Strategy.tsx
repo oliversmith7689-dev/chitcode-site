@@ -14,10 +14,10 @@ const Strategy: React.FC = () => (
       <h2 className="text-3xl sm:text-4xl md:text-5xl max-w-3xl leading-[1.05]">Подготовим оптимальную стратегию развития вашего канала</h2>
       <div className="mt-10 md:mt-14 grid md:grid-cols-3 gap-4 md:gap-6">
         {METRICS.map(m => (
-          <div key={m.title} className="rounded-inner bg-brand-paper p-6 md:p-7">
+          <div key={m.title} className="rounded-inner bg-brand-paper p-6 md:p-7 flex flex-col">
             <IconBubble>{m.icon}</IconBubble>
             <h3 className="text-xl mt-5 leading-tight">{m.title}</h3>
-            <div className="mt-6 text-4xl md:text-5xl font-semibold tabular-nums tracking-tight text-brand-purple">{m.value}</div>
+            <div className="mt-auto pt-6 text-4xl md:text-5xl font-semibold tabular-nums tracking-tight text-brand-purple">{m.value}</div>
             <p className="mt-2 text-sm text-brand-ink/55">{m.note}</p>
           </div>
         ))}

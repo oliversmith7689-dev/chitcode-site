@@ -42,8 +42,8 @@ const AgencyNDA: React.FC = () => {
               Мы не публикуем логотипы клиентов и не храним историю заказов. Примеры работы показываем только в личном диалоге.
             </p>
             <div className="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
-              <a href={TG_LINK} target="_blank" rel="noopener noreferrer" className="btn btn-lg bg-brand-purple text-white hover:bg-brand-deep">Узнать о примерах в ЛС</a>
-              <button onClick={() => setOpen(false)} className="btn btn-lg bg-brand-paper text-brand-ink hover:bg-brand-ink hover:text-white">Понятно</button>
+              <a href={TG_LINK} target="_blank" rel="noopener noreferrer" className="btn btn-lg btn-purple">Узнать о примерах в ЛС</a>
+              <button onClick={() => setOpen(false)} className="btn btn-lg btn-soft">Понятно</button>
             </div>
           </div>
         </div>

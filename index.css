@@ -28,16 +28,50 @@
 
 @layer components {
   .container-x { @apply max-w-7xl mx-auto px-5 sm:px-8; }
-  .btn { @apply inline-flex items-center justify-center gap-2 rounded-full font-medium transition-[transform,background-color,color,box-shadow] duration-200 active:scale-[.98] select-none; }
+  .btn {
+    @apply relative inline-flex items-center justify-center gap-2 rounded-full font-medium select-none overflow-hidden isolate;
+    transition: transform .25s cubic-bezier(.2,.8,.2,1), box-shadow .25s cubic-bezier(.2,.8,.2,1), background-color .25s, color .25s;
+  }
+  /* блик, пробегающий по кнопке */
+  .btn::after {
+    content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+    background: linear-gradient(115deg, transparent 30%, rgba(255,255,255,.55) 50%, transparent 70%);
+    transform: translateX(-130%) skewX(-12deg); opacity: 0;
+    transition: transform .6s cubic-bezier(.2,.8,.2,1), opacity .2s;
+  }
+  .btn:hover { transform: translateY(-2px); }
+  .btn:hover::after { transform: translateX(130%) skewX(-12deg); opacity: 1; }
+  .btn:active { transform: translateY(0) scale(.97); transition-duration: .08s; }
   .btn-lg { @apply px-7 py-4 text-base; }
   .btn-md { @apply px-5 py-2.5 text-sm; }
-  .btn-acid { @apply bg-brand-acid text-brand-ink hover:bg-white shadow-acid; }
-  .btn-ink { @apply bg-brand-ink text-white hover:bg-brand-purple; }
-  .btn-white { @apply bg-white text-brand-purple hover:bg-brand-acid hover:text-brand-ink; }
-  .btn-ghost { @apply border border-white/40 text-white hover:bg-white hover:text-brand-purple; }
+  .btn-acid { @apply bg-brand-acid text-brand-ink shadow-acid; }
+  .btn-acid:hover { box-shadow: 0 14px 40px -10px rgba(226,255,102,.7), 0 0 0 4px rgba(226,255,102,.25); }
+  .btn-ink { @apply bg-brand-ink text-white; }
+  .btn-ink:hover { @apply bg-brand-purple; box-shadow: 0 14px 40px -12px rgba(126,34,206,.6); }
+  .btn-purple { @apply bg-brand-purple text-white; }
+  .btn-purple:hover { @apply bg-brand-deep; box-shadow: 0 14px 40px -12px rgba(126,34,206,.6); }
+  .btn-white { @apply bg-white text-brand-purple; }
+  .btn-white:hover { @apply bg-brand-acid text-brand-ink; box-shadow: 0 10px 30px -10px rgba(226,255,102,.7); }
+  .btn-soft { @apply bg-white text-brand-ink; }
+  .btn-soft:hover { @apply bg-brand-purple text-white; box-shadow: 0 14px 40px -12px rgba(126,34,206,.5); }
+  .btn-ghost { @apply border border-white/40 text-white; }
+  .btn-ghost:hover { @apply bg-white text-brand-purple; }
+  /* стрелка в кружке — уезжает при наведении на родителя */
+  .arrow-dot { @apply w-10 h-10 rounded-full flex items-center justify-center overflow-hidden relative; transition: background-color .25s, transform .25s cubic-bezier(.2,.8,.2,1); }
+  .arrow-dot svg { transition: transform .3s cubic-bezier(.2,.8,.2,1); }
+  .group:hover .arrow-dot { transform: rotate(-45deg) scale(1.08); }
+  .group:hover .arrow-dot svg { transform: translateX(2px); }
   .card { @apply bg-white rounded-card shadow-card; }
   .eyebrow { @apply text-xs font-medium text-brand-purple; }
 }
+
+@keyframes caret { 0%, 45% { opacity: 1; } 50%, 100% { opacity: 0; } }
+.caret { display: inline-block; width: .12em; height: .9em; background: #E2FF66; margin-left: .08em; vertical-align: -.06em; border-radius: 2px; animation: caret 1.1s steps(1) infinite; box-shadow: 0 0 18px rgba(226,255,102,.9); }
+
+/* ценник миллионника: наведение — рост, свечение, глитч */
+.price-glitch { display: inline-block; cursor: default; transition: transform .35s cubic-bezier(.2,.8,.2,1), filter .35s, letter-spacing .35s; will-change: transform; }
+.price-glitch:hover { transform: scale(1.07) rotate(-1deg); filter: drop-shadow(0 0 22px rgba(226,255,102,.55)); letter-spacing: -.02em; text-shadow: 3px 0 #FF33FF, -3px 0 #33F0FF; animation: glitch .9s steps(2) infinite; }
+@keyframes glitch { 0% { text-shadow: 3px 0 #FF33FF, -3px 0 #33F0FF; } 33% { text-shadow: -3px 1px #FF33FF, 3px -1px #33F0FF; } 66% { text-shadow: 2px -2px #FF33FF, -2px 2px #33F0FF; } 100% { text-shadow: 3px 0 #FF33FF, -3px 0 #33F0FF; } }
 
 .no-scrollbar::-webkit-scrollbar { display: none; }
 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }

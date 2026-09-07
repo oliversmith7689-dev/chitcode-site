@@ -55,7 +55,7 @@ const StartEasy: React.FC<Props> = ({ role, setRole }) => (
             </div>
             <div className="mt-6 flex items-center justify-between">
               <span className="text-sm font-medium text-brand-ink/50 group-hover:text-brand-purple transition-colors">{s.cta}</span>
-              <span className="w-10 h-10 rounded-full bg-brand-ink text-white flex items-center justify-center group-hover:bg-brand-purple transition-colors"><IconArrow size={18} /></span>
+              <span className="arrow-dot bg-brand-ink text-white group-hover:bg-brand-purple"><IconArrow size={18} /></span>
             </div>
           </a>
         ))}

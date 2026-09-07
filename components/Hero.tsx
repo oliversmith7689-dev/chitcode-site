@@ -13,11 +13,10 @@ const Hero: React.FC = () => (
       <div className="grid lg:grid-cols-12 gap-8 items-center">
         {/* Текст */}
         <div className="lg:col-span-7 relative z-10">
-          <div className="inline-block rounded-[28px] md:rounded-[36px] border border-white/35 px-5 py-5 sm:px-8 sm:py-7 md:px-10 md:py-9 backdrop-blur-[2px] bg-white/[.03] relative">
-            <span className="absolute -top-[6px] -left-[6px] w-3 h-3 bg-brand-acid rounded-sm" aria-hidden="true" />
-            <h1 className="text-white text-[34px] leading-[1.04] sm:text-6xl md:text-[76px] xl:text-[88px] tracking-[-0.045em] font-semibold">
-              Подключи чит-код<br className="hidden sm:block" />
-              {' '}к своему каналу
+          <div className="inline-block rounded-[28px] md:rounded-[36px] border border-white/35 px-5 py-5 sm:px-8 sm:py-7 md:px-10 md:py-9 backdrop-blur-[2px] bg-white/[.03] relative max-w-full">
+            <h1 className="text-white text-[34px] leading-[1.04] sm:text-[52px] md:text-[60px] lg:text-[56px] xl:text-[68px] 2xl:text-[76px] tracking-[-0.045em] font-semibold sm:whitespace-nowrap">
+              Подключи чит-код<br />
+              к своему каналу<span className="caret" aria-hidden="true" />
             </h1>
           </div>
 
