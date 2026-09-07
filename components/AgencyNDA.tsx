@@ -1,91 +1,49 @@
-
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import { TG_LINK } from '../lib/constants';
 
 const AgencyNDA: React.FC = () => {
-  const [showNDA, setShowNDA] = useState(false);
-  const TG_LINK = "https://t.me/chitcod_ru";
+  const [open, setOpen] = useState(false);
 
-  // Блокировка прокрутки при открытом NDA
   useEffect(() => {
-    if (showNDA) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
-    }
-    return () => {
-      document.body.style.overflow = 'unset';
-    };
-  }, [showNDA]);
+    document.body.style.overflow = open ? 'hidden' : '';
+    const onEsc = (e: KeyboardEvent) => { if (e.key === 'Escape') setOpen(false); };
+    window.addEventListener('keydown', onEsc);
+    return () => { document.body.style.overflow = ''; window.removeEventListener('keydown', onEsc); };
+  }, [open]);
 
   return (
     <>
-      {/* Основная секция-триггер (всегда в потоке, чтобы избежать прыжков) */}
-      <div className="text-center relative py-20 bg-gray-50/50 rounded-[60px] border border-gray-100">
-        <div className="relative z-10 px-6">
-          <div className="mb-8 inline-flex items-center gap-2 px-4 py-1.5 bg-black/5 rounded-full">
-            <div className="w-1.5 h-1.5 rounded-full bg-brand-purple animate-pulse"></div>
-            <span className="text-[10px] font-bold uppercase tracking-widest text-gray-500 italic">Партнерская программа</span>
+      <div className="container-x">
+        <div className="card p-8 sm:p-12 md:p-16 text-center">
+          <div className="inline-flex items-center gap-2 text-sm text-brand-purple mb-6">
+            <span className="w-1.5 h-1.5 rounded-full bg-brand-purple animate-pulse-dot" />
+            Партнёрская программа
           </div>
-          
-          <h2 className="text-4xl md:text-6xl font-bold mb-8 uppercase tracking-tighter max-w-4xl mx-auto leading-[0.9]">
-            С нами сотрудничают более 30% рекламных агентств СНГ
+          <h2 className="text-3xl sm:text-4xl md:text-5xl max-w-3xl mx-auto leading-[1.05]">
+            С нами работают больше 30% рекламных агентств СНГ
           </h2>
-          <p className="text-gray-500 text-lg mb-12 font-medium max-w-2xl mx-auto">
-            Они нашли свой Chitcod и обеспечивают клиентам безупречную статистику без лишних вопросов. А ты?
+          <p className="mt-5 text-brand-ink/60 text-lg max-w-xl mx-auto">
+            Они нашли свой чит-код и отдают клиентам ровную статистику без лишних вопросов.
           </p>
-          
-          <button 
-            onClick={() => setShowNDA(true)}
-            className="px-12 py-5 bg-black text-white rounded-full font-bold text-lg hover:shadow-2xl transition-all uppercase tracking-widest active:scale-95"
-          >
-            Обсудить кейсы с менеджером
-          </button>
+          <button onClick={() => setOpen(true)} className="btn btn-lg btn-ink mt-9">Обсудить кейсы с менеджером</button>
         </div>
       </div>
 
-      {/* Модальное окно NDA (вне потока документа) */}
-      {showNDA && (
-        <div className="fixed inset-0 z-[3000] flex flex-col items-center justify-center p-6 text-center animate-in fade-in duration-300">
-          {/* Фон с размытием */}
-          <div className="absolute inset-0 bg-white/95 backdrop-blur-2xl" onClick={() => setShowNDA(false)}></div>
-          
-          <div className="absolute top-10 right-10 z-[3001]">
-             <button 
-              onClick={() => setShowNDA(false)}
-              className="w-12 h-12 rounded-full border border-gray-200 flex items-center justify-center bg-white hover:bg-gray-50 transition-colors shadow-sm"
-            >
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      {open && (
+        <div className="fixed inset-0 z-[3000] flex items-center justify-center p-6 animate-in fade-in duration-200" role="dialog" aria-modal="true" aria-labelledby="nda-title">
+          <div className="absolute inset-0 bg-brand-ink/70 backdrop-blur-xl" onClick={() => setOpen(false)} />
+          <div className="relative bg-white rounded-card max-w-xl w-full p-8 sm:p-12 text-center animate-in zoom-in-95 slide-in-from-bottom-4 duration-300">
+            <button onClick={() => setOpen(false)} className="absolute top-5 right-5 w-10 h-10 rounded-full hover:bg-brand-paper flex items-center justify-center" aria-label="Закрыть">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round"><path d="M6 6l12 12M18 6L6 18" /></svg>
             </button>
-          </div>
-          
-          {/* Фоновый текст NDA */}
-          <div className="font-grotesk text-[25vw] font-black leading-none text-gray-100 absolute select-none pointer-events-none opacity-50 z-0">
-            NDA
-          </div>
-          
-          <div className="relative z-10 max-w-2xl animate-in slide-in-from-bottom-12 zoom-in-95 duration-500">
-            <h2 className="text-7xl md:text-9xl font-bold mb-8 tracking-tighter uppercase text-black">NDA</h2>
-            <p className="text-2xl font-bold text-black mb-6 uppercase tracking-tight">
-              Мы не хвастаемся вашими успехами.
+            <div id="nda-title" className="text-6xl sm:text-7xl font-semibold tracking-[-0.06em] text-brand-purple">NDA</div>
+            <p className="mt-4 text-xl font-medium">Мы не хвастаемся вашими успехами</p>
+            <p className="mt-3 text-brand-ink/60 leading-relaxed">
+              Мы не публикуем логотипы клиентов и не храним историю заказов. Примеры работы показываем только в личном диалоге.
             </p>
-            <p className="text-xl text-gray-500 leading-relaxed mb-12 font-medium">
-              Полная анонимность и защита данных — основа нашего сервиса. Мы не публикуем логотипы клиентов, но готовы показать примеры работы в личном диалоге.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <a 
-                    href={TG_LINK}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="px-10 py-5 bg-brand-purple text-white rounded-full font-bold uppercase tracking-widest hover:shadow-[0_20px_40px_rgba(139,77,255,0.4)] hover:scale-105 transition-all text-center"
-                >
-                    Узнать о примерах в ЛС
-                </a>
-                <button 
-                    onClick={() => setShowNDA(false)}
-                    className="px-10 py-5 bg-black text-white rounded-full font-bold uppercase tracking-widest hover:scale-105 transition-transform"
-                >
-                    Понятно
-                </button>
+            <div className="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
+              <a href={TG_LINK} target="_blank" rel="noopener noreferrer" className="btn btn-lg bg-brand-purple text-white hover:bg-brand-deep">Узнать о примерах в ЛС</a>
+              <button onClick={() => setOpen(false)} className="btn btn-lg bg-brand-paper text-brand-ink hover:bg-brand-ink hover:text-white">Понятно</button>
             </div>
           </div>
         </div>
