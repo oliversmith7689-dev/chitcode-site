@@ -1,0 +1,43 @@
+@import '@fontsource-variable/geist';
+@import '@fontsource-variable/geist-mono';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    @apply bg-brand-paper text-brand-ink font-sans antialiased;
+    font-feature-settings: 'ss01', 'cv11';
+  }
+  h1, h2, h3, h4 {
+    @apply font-semibold tracking-[-0.03em];
+    text-wrap: balance;
+  }
+  p { text-wrap: pretty; }
+  ::selection { @apply bg-brand-acid text-brand-ink; }
+  :focus-visible { @apply outline-none ring-2 ring-brand-acid ring-offset-2 ring-offset-brand-paper; }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+  }
+}
+
+@layer components {
+  .container-x { @apply max-w-7xl mx-auto px-5 sm:px-8; }
+  .btn { @apply inline-flex items-center justify-center gap-2 rounded-full font-medium transition-[transform,background-color,color,box-shadow] duration-200 active:scale-[.98] select-none; }
+  .btn-lg { @apply px-7 py-4 text-base; }
+  .btn-md { @apply px-5 py-2.5 text-sm; }
+  .btn-acid { @apply bg-brand-acid text-brand-ink hover:bg-white shadow-acid; }
+  .btn-ink { @apply bg-brand-ink text-white hover:bg-brand-purple; }
+  .btn-white { @apply bg-white text-brand-purple hover:bg-brand-acid hover:text-brand-ink; }
+  .btn-ghost { @apply border border-white/40 text-white hover:bg-white hover:text-brand-purple; }
+  .card { @apply bg-white rounded-card shadow-card; }
+  .eyebrow { @apply text-xs font-medium text-brand-purple; }
+}
+
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
