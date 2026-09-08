@@ -65,11 +65,11 @@ const App: React.FC = () => {
       <Hero />
 
       <main className="relative z-10 pt-6 md:pt-8 space-y-6 md:space-y-8 pb-6 md:pb-8">
-        <section id="start" className="scroll-mt-24"><StartEasy role={role} setRole={setRole} /></section>
-        <section className="py-10 md:py-16"><ComparisonSection role={role} /></section>
         <section><Algorithms role={role} /></section>
+        <section className="py-10 md:py-16"><ComparisonSection role={role} /></section>
         <section><SmoothVsSpike /></section>
         <section id="technology" className="scroll-mt-24"><StaircaseTech /></section>
+        <section id="start" className="scroll-mt-24"><StartEasy role={role} setRole={setRole} /></section>
         <section><Strategy /></section>
         <section><LaunchPlan /></section>
         <section id="security" className="scroll-mt-24"><SecurityBlock /></section>
