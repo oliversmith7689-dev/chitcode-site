@@ -85,13 +85,6 @@ const StartEasy: React.FC<Props> = ({ role, setRole }) => {
 
         {/* шаги */}
         <ol className="relative grid md:grid-cols-3 gap-4 md:gap-5">
-          {/* линия, связывающая шаги */}
-          <div
-            className="hidden md:block absolute left-8 right-8 top-[21px] h-[2px] bg-brand-ink/20 origin-left rounded-full"
-            style={{ transform: inView ? 'scaleX(1)' : 'scaleX(0)', transition: 'transform 1s cubic-bezier(.2,.8,.2,1) .2s' }}
-            aria-hidden="true"
-          />
-
           {steps.map((s, i) => (
             <li
               key={role + i}
@@ -102,19 +95,14 @@ const StartEasy: React.FC<Props> = ({ role, setRole }) => {
                 transition: `opacity .5s ease ${i * 120}ms, transform .5s cubic-bezier(.2,.8,.2,1) ${i * 120}ms`,
               }}
             >
-              {/* номер поверх линии */}
-              <div className="hidden md:flex absolute -top-1 left-7 w-11 h-11 rounded-full bg-brand-ink text-brand-acid items-center justify-center text-lg font-semibold tabular-nums z-10">
-                {i + 1}
-              </div>
-
               <a
                 href={TG_LINK}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group bg-white rounded-inner p-6 md:p-7 md:pt-14 flex flex-col justify-between h-full min-h-[260px] transition-[transform,box-shadow] duration-300 hover:-translate-y-1.5 hover:shadow-[0_24px_60px_-24px_rgba(20,17,24,.28)]"
+                className="group bg-white rounded-inner p-6 md:p-7 flex flex-col justify-between h-full min-h-[260px] transition-[transform,box-shadow] duration-300 hover:-translate-y-1.5 hover:shadow-[0_24px_60px_-24px_rgba(20,17,24,.28)]"
               >
                 <div>
-                  <span className="md:hidden inline-flex w-9 h-9 rounded-full bg-brand-ink text-brand-acid items-center justify-center text-sm font-semibold mb-4">
+                  <span className="inline-flex w-10 h-10 md:w-11 md:h-11 rounded-full bg-brand-ink text-brand-acid items-center justify-center text-base md:text-lg font-semibold tabular-nums mb-5">
                     {i + 1}
                   </span>
                   <h3 className="text-xl md:text-[26px] leading-tight mb-3">{s.title}</h3>
