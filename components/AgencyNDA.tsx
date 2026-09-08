@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { TG_LINK } from '../lib/constants';
+import { useInView } from '../lib/useInView';
+import { revealStyle } from '../lib/reveal';
 
 const AgencyNDA: React.FC = () => {
   const [open, setOpen] = useState(false);
+  const { ref, inView } = useInView<HTMLDivElement>();
 
   useEffect(() => {
     document.body.style.overflow = open ? 'hidden' : '';
@@ -14,18 +17,18 @@ const AgencyNDA: React.FC = () => {
   return (
     <>
       <div className="container-x">
-        <div className="card p-8 sm:p-12 md:p-16 text-center">
-          <div className="inline-flex items-center gap-2 text-sm text-brand-purple mb-6">
+        <div ref={ref} className="card p-8 sm:p-12 md:p-16 text-center">
+          <div className="inline-flex items-center gap-2 text-sm text-brand-purple mb-6" style={revealStyle(inView, 0, { y: 14 })}>
             <span className="w-1.5 h-1.5 rounded-full bg-brand-purple animate-pulse-dot" />
             Партнёрская программа
           </div>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl max-w-3xl mx-auto leading-[1.05]">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl max-w-3xl mx-auto leading-[1.05]" style={revealStyle(inView, 1, { y: 16 })}>
             С нами работают больше 30% рекламных агентств СНГ
           </h2>
-          <p className="mt-5 text-brand-ink/60 text-lg max-w-xl mx-auto">
+          <p className="mt-5 text-brand-ink/60 text-lg max-w-xl mx-auto" style={revealStyle(inView, 2, { y: 16 })}>
             Они нашли свой чит-код и отдают клиентам ровную статистику без лишних вопросов.
           </p>
-          <button onClick={() => setOpen(true)} className="btn btn-lg btn-ink mt-9">Обсудить кейсы с менеджером</button>
+          <button onClick={() => setOpen(true)} className="btn btn-lg btn-ink mt-9" style={revealStyle(inView, 3, { y: 16 })}>Обсудить кейсы с менеджером</button>
         </div>
       </div>
 

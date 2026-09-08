@@ -1,4 +1,6 @@
 import React from 'react';
+import { useInView } from '../lib/useInView';
+import { revealStyle } from '../lib/reveal';
 import { IconCheck } from './Icons';
 import { TG_LINK, UserRole } from '../lib/constants';
 
@@ -12,19 +14,21 @@ const TIERS: Tier[] = [
   { name: 'Флагман', size: '100K+', who: 'Канал-миллионник под ключ', items: ['Стратегия, нейминг, инфраструктура', 'Полный stealth-режим', 'Персональный менеджер', 'Готов к продаже рекламы'], flag: true },
 ];
 
-const Pricing: React.FC<{ role: UserRole }> = ({ role }) => (
+const Pricing: React.FC<{ role: UserRole }> = ({ role }) => {
+  const { ref, inView } = useInView<HTMLDivElement>();
+  return (
   <div className="container-x">
-    <div className="card p-6 sm:p-10 md:p-14">
+    <div ref={ref} className="card p-6 sm:p-10 md:p-14">
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
-        <h2 className="text-3xl sm:text-4xl md:text-5xl">Дорого, качественно, надёжно</h2>
-        <p className="text-brand-ink/55 max-w-sm md:text-right">
+        <h2 className="text-3xl sm:text-4xl md:text-5xl" style={revealStyle(inView, 0, { y: 16 })}>Дорого, качественно, надёжно</h2>
+        <p className="text-brand-ink/55 max-w-sm md:text-right" style={revealStyle(inView, 1, { y: 16 })}>
           {role === 'agency' ? 'Для агентств — оптовая сетка на объём. Цену считаем под портфель.' : 'Цену считаем под канал: объём, ниша, ритм постинга. Никаких прайсов «для всех».'}
         </p>
       </div>
 
       <div className="mt-10 grid sm:grid-cols-2 xl:grid-cols-4 gap-4 md:gap-5">
-        {TIERS.map(t => (
-          <div key={t.name} className={`rounded-inner p-6 md:p-7 flex flex-col ${t.flag ? 'bg-brand-ink text-white' : 'bg-brand-paper'}`}>
+        {TIERS.map((t, i) => (
+          <div key={t.name} className={`rounded-inner p-6 md:p-7 flex flex-col ${t.flag ? 'bg-brand-ink text-white' : 'bg-brand-paper'}`} style={revealStyle(inView, i + 2, { step: 80 })}>
             <div className="flex items-baseline justify-between">
               <div className={`text-4xl font-semibold tracking-tight ${t.flag ? 'text-brand-acid' : 'text-brand-purple'}`}>{t.name}</div>
               <div className={`text-sm ${t.flag ? 'text-white/50' : 'text-brand-ink/45'}`}>{t.size}</div>
@@ -47,6 +51,7 @@ const Pricing: React.FC<{ role: UserRole }> = ({ role }) => (
       </div>
     </div>
   </div>
-);
+  );
+};
 
 export default Pricing;
