@@ -101,10 +101,6 @@ const Chart: React.FC<{ data: number[]; tone: 'moss' | 'rose'; on: boolean }> = 
             <rect x="-56" y="-24" width="112" height="20" rx="10" fill="#fff" />
             <text x="0" y="-10" textAnchor="middle" fontSize="10.5" fill="#E03A3A" fontWeight="600">порог аномалии</text>
           </g>
-          {data.map((v, i) => v > THRESHOLD && (
-            <circle key={i} cx={cx(i)} cy={y(v) - 9} r="3" fill="#fff"
-              style={{ opacity: on ? 1 : 0, transition: `opacity .4s ease ${1500 + i * 90}ms`, animation: on ? `pulse-dot 1.8s ease-in-out ${1.6 + i * 0.12}s infinite` : 'none' }} />
-          ))}
         </>
       )}
 
