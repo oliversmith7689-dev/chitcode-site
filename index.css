@@ -68,10 +68,38 @@
 @keyframes caret { 0%, 45% { opacity: 1; } 50%, 100% { opacity: 0; } }
 .caret { display: inline-block; width: .12em; height: .9em; background: #E2FF66; margin-left: .08em; vertical-align: -.06em; border-radius: 2px; animation: caret 1.1s steps(1) infinite; box-shadow: 0 0 18px rgba(226,255,102,.9); }
 
-/* ценник миллионника: наведение — рост, свечение, глитч */
-.price-glitch { display: inline-block; cursor: default; transition: transform .35s cubic-bezier(.2,.8,.2,1), filter .35s, letter-spacing .35s; will-change: transform; }
-.price-glitch:hover { transform: scale(1.07) rotate(-1deg); filter: drop-shadow(0 0 22px rgba(226,255,102,.55)); letter-spacing: -.02em; text-shadow: 3px 0 #FF33FF, -3px 0 #33F0FF; animation: glitch .9s steps(2) infinite; }
+/* ценник миллионника: сам моргает, тап или клик успокаивает */
+.price-glitch {
+  display: inline-block; cursor: pointer; will-change: transform;
+  transition: transform .35s cubic-bezier(.2,.8,.2,1), filter .35s, letter-spacing .35s, text-shadow .35s;
+  animation: glitch-idle 3.4s steps(1, end) infinite;
+}
+/* тап или клик успокаивает надпись */
+.price-glitch.is-calm { animation: none; text-shadow: none; transform: none; filter: none; letter-spacing: normal; }
+
+@media (hover: hover) {
+  .price-glitch:not(.is-calm):hover {
+    transform: scale(1.07) rotate(-1deg);
+    filter: drop-shadow(0 0 22px rgba(226,255,102,.55));
+    letter-spacing: -.02em;
+    animation: glitch .9s steps(2) infinite;
+  }
+}
+
+/* фоновые разряды: почти всё время чисто, короткие вспышки */
+@keyframes glitch-idle {
+  0%, 74% { text-shadow: none; transform: none; }
+  76% { text-shadow: 3px 0 #FF33FF, -3px 0 #33F0FF; transform: translateX(-1px); }
+  79% { text-shadow: -3px 1px #FF33FF, 3px -1px #33F0FF; transform: translateX(2px); }
+  82% { text-shadow: none; transform: none; }
+  88% { text-shadow: 2px -2px #FF33FF, -2px 2px #33F0FF; transform: translateX(1px); }
+  91%, 100% { text-shadow: none; transform: none; }
+}
 @keyframes glitch { 0% { text-shadow: 3px 0 #FF33FF, -3px 0 #33F0FF; } 33% { text-shadow: -3px 1px #FF33FF, 3px -1px #33F0FF; } 66% { text-shadow: 2px -2px #FF33FF, -2px 2px #33F0FF; } 100% { text-shadow: 3px 0 #FF33FF, -3px 0 #33F0FF; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .price-glitch { animation: none; text-shadow: none; }
+}
 
 .no-scrollbar::-webkit-scrollbar { display: none; }
 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }

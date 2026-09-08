@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useInView } from '../lib/useInView';
 import { revealStyle } from '../lib/reveal';
 import { TG_LINK } from '../lib/constants';
@@ -12,6 +12,7 @@ const POINTS = [
 
 const MillionaireChannel: React.FC = () => {
   const { ref, inView } = useInView<HTMLDivElement>();
+  const [calm, setCalm] = useState(false);
   return (
   <div className="container-x">
     <div ref={ref} className="bg-brand-ink rounded-card p-6 sm:p-10 md:p-16 relative overflow-hidden text-white">
@@ -21,7 +22,17 @@ const MillionaireChannel: React.FC = () => {
           <div className="inline-flex items-center rounded-full border border-brand-acid/40 text-brand-acid text-sm px-4 py-1.5 mb-8">Флагман 100K+</div>
           <h2 className="text-4xl sm:text-5xl md:text-7xl leading-[0.95]">
             Канал-миллионник<br />
-            <span className="text-brand-acid price-glitch">за 1 000 000 ₽</span>
+            <span
+              role="button"
+              tabIndex={0}
+              aria-pressed={calm}
+              aria-label={calm ? 'Включить анимацию цены' : 'Остановить анимацию цены'}
+              onClick={() => setCalm(v => !v)}
+              onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setCalm(v => !v); } }}
+              className={`text-brand-acid price-glitch${calm ? ' is-calm' : ''}`}
+            >
+              за 1 000 000 ₽
+            </span>
           </h2>
           <p className="mt-7 text-white/60 text-lg leading-relaxed max-w-xl">
             Собираем медиа-актив под ключ: стратегия, нейминг, инфраструктура и залив первой сотни тысяч аудитории по лесенке.
