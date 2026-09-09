@@ -25,21 +25,24 @@ const TIERS = [
   { from: 1000000, pct: 20 },
 ];
 
-type Form = {
+export type Form = {
   subs: number; posts: number; views: number; reacts: number; reposts: number;
   boosts: number; polls: number; bots: number; premium: boolean; traffic: number;
 };
 
-const START: Form = {
-  subs: 8000, posts: 15, views: 5000, reacts: 75, reposts: 25,
-  boosts: 20, polls: 0, bots: 0, premium: false, traffic: 500,
+/** Пресеты совпадают с пакетами из блока тарифов. */
+export const FORMS: Record<'p10' | 'p25' | 'p50' | 'p100', Form> = {
+  p10: { subs: 1500, posts: 10, views: 1500, reacts: 25, reposts: 8, boosts: 6, polls: 0, bots: 0, premium: false, traffic: 0 },
+  p25: { subs: 4000, posts: 15, views: 3000, reacts: 45, reposts: 15, boosts: 20, polls: 0, bots: 0, premium: false, traffic: 0 },
+  p50: { subs: 8000, posts: 15, views: 5000, reacts: 75, reposts: 25, boosts: 50, polls: 0, bots: 0, premium: false, traffic: 0 },
+  p100: { subs: 25000, posts: 15, views: 15000, reacts: 260, reposts: 90, boosts: 50, polls: 0, bots: 5000, premium: false, traffic: 2000 },
 };
 
-const PRESETS: { name: string; note: string; form: Form }[] = [
-  { name: '10K', note: 'старт', form: { subs: 1500, posts: 10, views: 1500, reacts: 25, reposts: 8, boosts: 6, polls: 0, bots: 0, premium: false, traffic: 0 } },
-  { name: '25K', note: 'рост', form: { subs: 4000, posts: 15, views: 3000, reacts: 45, reposts: 15, boosts: 20, polls: 0, bots: 0, premium: false, traffic: 0 } },
-  { name: '50K', note: 'медиа-актив', form: START },
-  { name: '100K+', note: 'флагман', form: { subs: 25000, posts: 15, views: 15000, reacts: 260, reposts: 90, boosts: 50, polls: 0, bots: 5000, premium: false, traffic: 2000 } },
+const PRESETS: { key: keyof typeof FORMS; name: string; note: string }[] = [
+  { key: 'p10', name: '10 000 ₽', note: 'поддержка' },
+  { key: 'p25', name: '25 000 ₽', note: 'рост' },
+  { key: 'p50', name: '50 000 ₽', note: 'медиа-актив' },
+  { key: 'p100', name: 'от 100 000 ₽', note: 'флагман' },
 ];
 
 const rub = (n: number) => Math.round(n).toLocaleString('ru-RU') + ' ₽';
@@ -69,16 +72,21 @@ function useEstimate(f: Form) {
   }, [f]);
 }
 
+const INPUT =
+  'w-full bg-transparent py-3 font-mono text-lg tracking-tight tabular-nums ' +
+  'outline-none focus:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 ' +
+  '[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none';
+
 const Field: React.FC<{
   label: string; unit: string; value: number; onChange: (v: number) => void; step?: number; hint?: string;
 }> = ({ label, unit, value, onChange, step = 100, hint }) => (
   <label className="block">
     <span className="block text-xs font-medium text-brand-ink/55 mb-1.5">{label}</span>
-    <span className="flex items-center gap-2 bg-brand-paper rounded-2xl px-4 border border-transparent focus-within:border-brand-purple/40 transition-colors">
+    <span className="flex items-center gap-2 bg-brand-paper rounded-2xl px-4 ring-1 ring-transparent focus-within:ring-brand-purple/50 transition-shadow">
       <input
         type="number" min={0} step={step} value={value} inputMode="numeric"
         onChange={e => onChange(Math.max(0, Number(e.target.value) || 0))}
-        className="w-full bg-transparent py-3 font-mono text-lg tracking-tight tabular-nums outline-none"
+        className={INPUT}
       />
       <span className="text-xs text-brand-ink/40 shrink-0">{unit}</span>
     </span>
@@ -86,8 +94,8 @@ const Field: React.FC<{
   </label>
 );
 
-const CalculatorModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
-  const [f, setF] = useState<Form>(START);
+export const CalculatorModal: React.FC<{ initial?: Form; onClose: () => void }> = ({ initial, onClose }) => {
+  const [f, setF] = useState<Form>(initial ?? FORMS.p50);
   const e = useEstimate(f);
   const set = (k: keyof Form) => (v: number) => setF(s => ({ ...s, [k]: v }));
 
@@ -123,7 +131,7 @@ const CalculatorModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
 
           <div className="mt-7 flex flex-wrap gap-2">
             {PRESETS.map(p => (
-              <button key={p.name} onClick={() => setF(p.form)}
+              <button key={p.key} onClick={() => setF(FORMS[p.key])}
                 className="rounded-full bg-brand-paper hover:bg-brand-purple hover:text-white transition-colors px-4 py-2 text-sm">
                 <span className="font-medium">{p.name}</span>
                 <span className="opacity-55"> · {p.note}</span>
@@ -215,33 +223,29 @@ const CalculatorModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
   );
 };
 
-const Calculator: React.FC = () => {
-  const [open, setOpen] = useState(false);
+/** Карточка-приглашение под сеткой тарифов. */
+const CalculatorCard: React.FC<{ onOpen: () => void }> = ({ onOpen }) => {
   const { ref, inView } = useInView<HTMLDivElement>();
-
   return (
-    <>
-      <div ref={ref} className="rounded-inner bg-brand-ink text-white p-6 md:p-8 flex flex-col lg:flex-row lg:items-center gap-6 lg:gap-10"
-        style={revealStyle(inView, 0, { y: 16 })}>
-        <div className="flex-1">
-          <p className="text-xs font-medium text-brand-acid">Калькулятор</p>
-          <h3 className="text-2xl sm:text-3xl mt-2">Посчитайте свой пакет за минуту</h3>
-          <p className="mt-3 text-white/60 max-w-xl">
-            Подписчики, просмотры, реакции, репосты, бусты и живой трафик — вводите объёмы, которые нужны каналу, и видите цену сразу. Скидка за объём считается автоматически.
-          </p>
-          <div className="mt-5 flex flex-wrap gap-2 text-[13px] font-mono text-white/55">
-            <span className="rounded-full bg-white/10 px-3 py-1.5">от 100 000 ₽ → −10%</span>
-            <span className="rounded-full bg-white/10 px-3 py-1.5">от 500 000 ₽ → −15%</span>
-            <span className="rounded-full bg-white/10 px-3 py-1.5">от 1 000 000 ₽ → −20%</span>
-          </div>
+    <div ref={ref} className="rounded-inner bg-brand-ink text-white p-6 md:p-8 flex flex-col lg:flex-row lg:items-center gap-6 lg:gap-10"
+      style={revealStyle(inView, 0, { y: 16 })}>
+      <div className="flex-1">
+        <p className="text-xs font-medium text-brand-acid">Калькулятор</p>
+        <h3 className="text-2xl sm:text-3xl mt-2">Посчитайте свой пакет за минуту</h3>
+        <p className="mt-3 text-white/60 max-w-xl">
+          Подписчики, просмотры, реакции, репосты, бусты и живой трафик — вводите объёмы, которые нужны каналу, и видите цену сразу. Скидка за объём считается автоматически.
+        </p>
+        <div className="mt-5 flex flex-wrap gap-2 text-[13px] font-mono text-white/55">
+          <span className="rounded-full bg-white/10 px-3 py-1.5">от 100 000 ₽ → −10%</span>
+          <span className="rounded-full bg-white/10 px-3 py-1.5">от 500 000 ₽ → −15%</span>
+          <span className="rounded-full bg-white/10 px-3 py-1.5">от 1 000 000 ₽ → −20%</span>
         </div>
-        <button onClick={() => setOpen(true)} className="btn btn-lg btn-acid shrink-0 w-full lg:w-auto">
-          Открыть калькулятор
-        </button>
       </div>
-      {open && <CalculatorModal onClose={() => setOpen(false)} />}
-    </>
+      <button onClick={onOpen} className="btn btn-lg btn-acid shrink-0 w-full lg:w-auto">
+        Открыть калькулятор
+      </button>
+    </div>
   );
 };
 
-export default Calculator;
+export default CalculatorCard;
