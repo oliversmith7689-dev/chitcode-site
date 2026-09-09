@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useInView } from '../lib/useInView';
 import { revealStyle } from '../lib/reveal';
 import { TG_LINK } from '../lib/constants';
@@ -45,59 +45,94 @@ const PRESETS: { key: keyof typeof FORMS; name: string; note: string }[] = [
   { key: 'p100', name: 'от 100 000 ₽', note: 'флагман' },
 ];
 
+type NumKey = 'subs' | 'posts' | 'views' | 'reacts' | 'reposts' | 'boosts' | 'polls' | 'bots' | 'traffic';
+const NUM_KEYS: NumKey[] = ['subs', 'posts', 'views', 'reacts', 'reposts', 'boosts', 'polls', 'bots', 'traffic'];
+
+/** 100000 -> «100 000». Пустое значение остаётся пустым. */
+const group = (digits: string) => (digits ? Number(digits).toLocaleString('ru-RU') : '');
+const digitsOf = (s: string) => s.replace(/\D/g, '').replace(/^0+(?=\d)/, '').slice(0, 9);
 const rub = (n: number) => Math.round(n).toLocaleString('ru-RU') + ' ₽';
 const num = (n: number) => Math.round(n).toLocaleString('ru-RU');
 
-function useEstimate(f: Form) {
+type Vals = Record<NumKey, string>;
+const valsFromForm = (f: Form): Vals =>
+  NUM_KEYS.reduce((acc, k) => { acc[k] = group(String(f[k])); return acc; }, {} as Vals);
+
+function useEstimate(v: Vals, premium: boolean) {
   return useMemo(() => {
+    const n = (k: NumKey) => Number(v[k].replace(/\D/g, '')) || 0;
+    const posts = n('posts');
     const lines = [
-      { key: 'subs', name: 'Подписчики', vol: `${num(f.subs)} в месяц`, sum: f.subs * PRICE.subs },
-      { key: 'views', name: 'Просмотры', vol: `${num(f.views)} × ${num(f.posts)} постов`, sum: f.views * f.posts * PRICE.views },
-      { key: 'reacts', name: 'Реакции', vol: `${num(f.reacts)} на пост`, sum: f.reacts * f.posts * PRICE.reacts },
-      { key: 'reposts', name: 'Репосты', vol: `${num(f.reposts)} на пост`, sum: f.reposts * f.posts * PRICE.reposts },
-      { key: 'boosts', name: 'Бусты канала', vol: `${num(f.boosts)} на 30 дней`, sum: f.boosts * PRICE.boosts },
-      { key: 'polls', name: 'Голоса в опросах', vol: `${num(f.polls)} в месяц`, sum: f.polls * PRICE.polls },
-      { key: 'bots', name: f.premium ? 'Запуски бота, премиум' : 'Запуски бота', vol: `${num(f.bots)} в месяц`, sum: f.bots * (f.premium ? PRICE.botPremium : PRICE.botBasic) },
+      { key: 'subs', name: 'Подписчики', vol: `${num(n('subs'))} в месяц`, sum: n('subs') * PRICE.subs },
+      { key: 'views', name: 'Просмотры', vol: `${num(n('views'))} × ${num(posts)} постов`, sum: n('views') * posts * PRICE.views },
+      { key: 'reacts', name: 'Реакции', vol: `${num(n('reacts'))} на пост`, sum: n('reacts') * posts * PRICE.reacts },
+      { key: 'reposts', name: 'Репосты', vol: `${num(n('reposts'))} на пост`, sum: n('reposts') * posts * PRICE.reposts },
+      { key: 'boosts', name: 'Бусты канала', vol: `${num(n('boosts'))} на 30 дней`, sum: n('boosts') * PRICE.boosts },
+      { key: 'polls', name: 'Голоса в опросах', vol: `${num(n('polls'))} в месяц`, sum: n('polls') * PRICE.polls },
+      { key: 'bots', name: premium ? 'Запуски бота, премиум' : 'Запуски бота', vol: `${num(n('bots'))} в месяц`, sum: n('bots') * (premium ? PRICE.botPremium : PRICE.botBasic) },
     ].filter(l => l.sum > 0);
 
     const subtotal = lines.reduce((a, l) => a + l.sum, 0);
     const tier = [...TIERS].reverse().find(t => subtotal >= t.from);
     const pct = tier ? tier.pct : 0;
     const discount = subtotal * pct / 100;
-    const subscription = subtotal - discount;
-    const traffic = f.traffic * PRICE.traffic;
+    const traffic = n('traffic') * PRICE.traffic;
     const nextTier = TIERS.find(t => subtotal < t.from);
 
-    return { lines, subtotal, pct, discount, subscription, traffic, total: subscription + traffic, nextTier };
-  }, [f]);
+    return {
+      lines, subtotal, pct, discount, traffic, trafficQty: n('traffic'),
+      subscription: subtotal - discount, total: subtotal - discount + traffic, nextTier,
+    };
+  }, [v, premium]);
 }
 
-const INPUT =
-  'w-full bg-transparent py-3 font-mono text-lg tracking-tight tabular-nums ' +
-  'outline-none focus:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 ' +
-  '[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none';
-
 const Field: React.FC<{
-  label: string; unit: string; value: number; onChange: (v: number) => void; step?: number; hint?: string;
-}> = ({ label, unit, value, onChange, step = 100, hint }) => (
-  <label className="block">
-    <span className="block text-xs font-medium text-brand-ink/55 mb-1.5">{label}</span>
-    <span className="flex items-center gap-2 bg-brand-paper rounded-2xl px-4 ring-1 ring-transparent focus-within:ring-brand-purple/50 transition-shadow">
-      <input
-        type="number" min={0} step={step} value={value} inputMode="numeric"
-        onChange={e => onChange(Math.max(0, Number(e.target.value) || 0))}
-        className={INPUT}
-      />
-      <span className="text-xs text-brand-ink/40 shrink-0">{unit}</span>
-    </span>
-    {hint && <span className="block mt-1.5 text-[11px] text-brand-ink/40">{hint}</span>}
-  </label>
-);
+  label: string; unit: string; value: string; onChange: (v: string) => void; hint?: string;
+}> = ({ label, unit, value, onChange, hint }) => {
+  const ref = useRef<HTMLInputElement>(null);
+  const caretRef = useRef<number | null>(null);
+
+  const handle = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const el = e.target;
+    const caret = el.selectionStart ?? el.value.length;
+    caretRef.current = el.value.slice(0, caret).replace(/\D/g, '').length;
+    onChange(group(digitsOf(el.value)));
+  };
+
+  // каретка встаёт на ту же цифру, чтобы пробелы не сбивали ввод
+  useLayoutEffect(() => {
+    const want = caretRef.current;
+    caretRef.current = null;
+    const node = ref.current;
+    if (want === null || !node || document.activeElement !== node) return;
+    let i = 0, seen = 0;
+    while (i < value.length && seen < want) { if (/\d/.test(value[i])) seen++; i++; }
+    node.setSelectionRange(i, i);
+  }, [value]);
+
+  return (
+    <label className="block">
+      <span className="block text-xs font-medium text-brand-ink/55 mb-1.5">{label}</span>
+      <span className="flex items-center gap-2 bg-brand-paper rounded-2xl px-4 ring-1 ring-transparent focus-within:ring-brand-purple/50 transition-shadow">
+        <input
+          ref={ref}
+          type="text" inputMode="numeric" autoComplete="off" placeholder="0"
+          value={value} onChange={handle}
+          className="w-full bg-transparent py-3 font-mono text-lg tracking-tight tabular-nums placeholder:text-brand-ink/25
+                     outline-none focus:outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
+        />
+        <span className="text-xs text-brand-ink/40 shrink-0">{unit}</span>
+      </span>
+      {hint && <span className="block mt-1.5 text-[11px] text-brand-ink/40">{hint}</span>}
+    </label>
+  );
+};
 
 export const CalculatorModal: React.FC<{ initial?: Form; onClose: () => void }> = ({ initial, onClose }) => {
-  const [f, setF] = useState<Form>(initial ?? FORMS.p50);
-  const e = useEstimate(f);
-  const set = (k: keyof Form) => (v: number) => setF(s => ({ ...s, [k]: v }));
+  const [v, setV] = useState<Vals>(() => valsFromForm(initial ?? FORMS.p50));
+  const [premium, setPremium] = useState(initial?.premium ?? false);
+  const e = useEstimate(v, premium);
+  const set = (k: NumKey) => (val: string) => setV(s => ({ ...s, [k]: val }));
 
   useEffect(() => {
     const onEsc = (ev: KeyboardEvent) => { if (ev.key === 'Escape') onClose(); };
@@ -110,7 +145,7 @@ export const CalculatorModal: React.FC<{ initial?: Form; onClose: () => void }> 
   const tgText = encodeURIComponent(
     'Здравствуйте! Собрал пакет в калькуляторе на chitcod.ru:\n' +
     e.lines.map(l => `— ${l.name}: ${l.vol}`).join('\n') +
-    (f.traffic ? `\n— Живой трафик: ${num(f.traffic)} переходов` : '') +
+    (e.trafficQty ? `\n— Живой трафик: ${num(e.trafficQty)} переходов` : '') +
     `\nИтого по калькулятору: ${rub(e.total)} в месяц.\nХочу обсудить.`
   );
 
@@ -131,7 +166,7 @@ export const CalculatorModal: React.FC<{ initial?: Form; onClose: () => void }> 
 
           <div className="mt-7 flex flex-wrap gap-2">
             {PRESETS.map(p => (
-              <button key={p.key} onClick={() => setF(FORMS[p.key])}
+              <button key={p.key} onClick={() => { setV(valsFromForm(FORMS[p.key])); setPremium(FORMS[p.key].premium); }}
                 className="rounded-full bg-brand-paper hover:bg-brand-purple hover:text-white transition-colors px-4 py-2 text-sm">
                 <span className="font-medium">{p.name}</span>
                 <span className="opacity-55"> · {p.note}</span>
@@ -144,23 +179,23 @@ export const CalculatorModal: React.FC<{ initial?: Form; onClose: () => void }> 
               <div>
                 <h3 className="text-lg">Рост и поддержка</h3>
                 <div className="mt-4 grid sm:grid-cols-2 gap-4">
-                  <Field label="Прирост подписчиков" unit="в мес." value={f.subs} onChange={set('subs')} step={500} />
-                  <Field label="Постов в месяц" unit="шт" value={f.posts} onChange={set('posts')} step={1} />
-                  <Field label="Просмотров на пост" unit="шт" value={f.views} onChange={set('views')} step={500} />
-                  <Field label="Реакций на пост" unit="шт" value={f.reacts} onChange={set('reacts')} step={5} hint="Норма — от 15 на 1 000 просмотров" />
-                  <Field label="Репостов на пост" unit="шт" value={f.reposts} onChange={set('reposts')} step={5} />
-                  <Field label="Бустов канала" unit="шт" value={f.boosts} onChange={set('boosts')} step={5} hint="Срок — 30 дней" />
+                  <Field label="Прирост подписчиков" unit="в мес." value={v.subs} onChange={set('subs')} />
+                  <Field label="Постов в месяц" unit="шт" value={v.posts} onChange={set('posts')} />
+                  <Field label="Просмотров на пост" unit="шт" value={v.views} onChange={set('views')} />
+                  <Field label="Реакций на пост" unit="шт" value={v.reacts} onChange={set('reacts')} hint="Норма — от 15 на 1 000 просмотров" />
+                  <Field label="Репостов на пост" unit="шт" value={v.reposts} onChange={set('reposts')} />
+                  <Field label="Бустов канала" unit="шт" value={v.boosts} onChange={set('boosts')} hint="Срок — 30 дней" />
                 </div>
               </div>
 
               <div>
                 <h3 className="text-lg">Дополнительно</h3>
                 <div className="mt-4 grid sm:grid-cols-2 gap-4">
-                  <Field label="Голоса в опросах" unit="в мес." value={f.polls} onChange={set('polls')} step={500} />
-                  <Field label="Запуски бота" unit="в мес." value={f.bots} onChange={set('bots')} step={500} />
-                  <Field label="Переходы по рекламным ссылкам" unit="в мес." value={f.traffic} onChange={set('traffic')} step={100} hint="Живой трафик, считается отдельным блоком" />
+                  <Field label="Голоса в опросах" unit="в мес." value={v.polls} onChange={set('polls')} />
+                  <Field label="Запуски бота" unit="в мес." value={v.bots} onChange={set('bots')} />
+                  <Field label="Переходы по рекламным ссылкам" unit="в мес." value={v.traffic} onChange={set('traffic')} hint="Живой трафик, считается отдельным блоком" />
                   <label className="flex items-center gap-3 self-end pb-1 cursor-pointer select-none">
-                    <input type="checkbox" checked={f.premium} onChange={ev => setF(s => ({ ...s, premium: ev.target.checked }))}
+                    <input type="checkbox" checked={premium} onChange={ev => setPremium(ev.target.checked)}
                       className="w-5 h-5 accent-brand-purple rounded" />
                     <span className="text-sm">Бот с премиум-аккаунтов</span>
                   </label>
